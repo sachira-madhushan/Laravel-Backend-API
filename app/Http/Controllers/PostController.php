@@ -10,9 +10,11 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public static function index()
     {
         //
+        $post=Post::all();
+        return response()-> json($post);
     }
 
     /**
@@ -28,9 +30,10 @@ class PostController extends Controller
         $result=$post->save();
 
         if($result){
-            return $result;
+            return response()->json(['message'=>'Post added'],201);
+        }else{
+            return response()->json(['message'=>'Error while adding post'],500);
         }
-
 
     }
 
@@ -45,17 +48,33 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show($id)
     {
         //
+        $post=Post::find($id);
+
+        if(!empty($post)){
+            return response()->json(['data'=>$post],201);
+        }else{
+            return response()->json(['message'=>'Post not found'],404);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Request $req,$id)
     {
         //
+        $post =Post::find($id);
+        $post->title=is_null($req->title) ? $post -> title: $req->title;
+        $post->description=is_null($req->description) ? $post->description:$req->description;
+
+        $result=$post->save();
+        if($result){
+            return response()->json(['message'=>'Post updated','data'=>$post],201);
+        }
+
     }
 
     /**
@@ -69,8 +88,20 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
         //
+
+        if(Post::where('id',$id)->exists()){
+            $post=Post::find($id);
+            $post->delete();
+
+            return response()->json(['message'=>'Post deleted'],201);
+
+        }else{
+            return response()->json(['message'=>'Post not found'],404);
+
+        }
+
     }
 }

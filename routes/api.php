@@ -8,7 +8,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// PostController::class,'newpost'
-Route::post('/post/create',function(Request $req){
-    return PostController::create($req);
-});
+//post route
+
+Route::get('/post',[PostController::class,'index']);
+
+Route::get('/post/{id}',[PostController::class,'show']);
+
+Route::post('/post/create',[PostController::class,'create']);
+
+Route::put('/post/{id}',[PostController::class,'edit']);
+
+Route::delete('/post/{id}',[PostController::class,'destroy']);
+
+//end post route
