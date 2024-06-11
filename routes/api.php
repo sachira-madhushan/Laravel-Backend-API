@@ -12,16 +12,14 @@ Route::get('/user', function (Request $request) {
 //post route
 
 Route::get('/post',[PostController::class,'index']);
-
 Route::get('/post/{id}',[PostController::class,'show']);
-
 Route::post('/post/create',[PostController::class,'create']);
-
 Route::put('/post/{id}',[PostController::class,'edit']);
-
 Route::delete('/post/{id}',[PostController::class,'destroy']);
-
 //end post route
+
+
+
 
 
 Route::group([
@@ -30,10 +28,13 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-
     Route::post('login', [AuthController::class,'login']);
+    Route::post('register', [AuthController::class,'register']);
     Route::post('logout', [AuthController::class,'logout']);
     Route::post('refresh', [AuthController::class,'refresh']);
     Route::post('me', [AuthController::class,'me']);
 
+
 });
+
+
