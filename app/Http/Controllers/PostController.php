@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -22,9 +24,15 @@ class PostController extends Controller
      */
     public static function create(Request $req)
     {
-        //
+
+        $user=auth()->user();
+        if(!$user){
+            return response()->json(['message'=>'Unauthorized!'],401);
+        }
+
         $post=new Post;
         $post->title=$req ->title;
+        $post->u_id=$user['id'];
         $post->description=$req ->description;
 
         $result=$post->save();
@@ -65,8 +73,21 @@ class PostController extends Controller
      */
     public function edit(Request $req,$id)
     {
-        //
+        $user=auth()->user();
+        if(!$user){
+            return response()->json(['message'=>'Unauthorized!'],401);
+        }
+
         $post =Post::find($id);
+
+        if($user['id']!=$post['u_id']){
+            return response()->json(['message'=>'Unauthorized!'],401);
+        }
+
+        if(!$post){
+            return response()->json(['message'=>'Post not found!'],404);
+        }
+
         $post->title=is_null($req->title) ? $post -> title: $req->title;
         $post->description=is_null($req->description) ? $post->description:$req->description;
 
@@ -90,7 +111,18 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user=auth()->user();
+        if(!$user){
+            return response()->json(['message'=>'Unauthorized!'],401);
+        }
+
+        $post =Post::find($id);
+        if(!$post){
+            return response()->json(['message'=>'Post not found!'],404);
+        }
+        if($user['id']!=$post['u_id']){
+            return response()->json(['message'=>'Unauthorized!'],401);
+        }
 
         if(Post::where('id',$id)->exists()){
             $post=Post::find($id);

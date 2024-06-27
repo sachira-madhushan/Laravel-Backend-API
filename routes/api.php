@@ -5,22 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:api');
 
 //post route
 
 Route::get('/post',[PostController::class,'index']);
 Route::get('/post/{id}',[PostController::class,'show']);
-Route::post('/post/create',[PostController::class,'create']);
-Route::put('/post/{id}',[PostController::class,'edit']);
-Route::delete('/post/{id}',[PostController::class,'destroy']);
+
 //end post route
-
-
-
-
 
 Route::group([
 
@@ -34,7 +28,13 @@ Route::group([
     Route::post('refresh', [AuthController::class,'refresh']);
     Route::post('me', [AuthController::class,'me']);
 
-
 });
 
+Route::group([
+    'middleware'=>'api'
+],function ($router){
+    Route::post('/post/create',[PostController::class,'create']);
+    Route::put('/post/{id}',[PostController::class,'edit']);
+    Route::delete('/post/{id}',[PostController::class,'destroy']);
+});
 
