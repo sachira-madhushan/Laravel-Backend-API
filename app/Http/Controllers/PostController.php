@@ -9,19 +9,18 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
 
-    /**
-     * Display a listing of the resource.
-     */
+    //@des get all posts
+    //@route GET /api/post/
+    //@access public
     public static function index()
     {
-        //
         $post=Post::all();
         return response()-> json($post);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    //@des create new post
+    //@route POST /api/post/
+    //@access private
     public static function create(Request $req)
     {
 
@@ -45,20 +44,13 @@ class PostController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
+    //@des get one post
+    //@route GET /api/post/{id}
+    //@access public
     public function show($id)
     {
-        //
+
         $post=Post::find($id);
 
         if(!empty($post)){
@@ -68,9 +60,9 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    //@des edit a post
+    //@route PUT /api/post/{id}
+    //@access private
     public function edit(Request $req,$id)
     {
         $user=auth()->user();
@@ -98,17 +90,9 @@ class PostController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    //@des delete a post
+    //@route DELETE /api/post/{id}
+    //@access private
     public function destroy($id)
     {
         $user=auth()->user();
