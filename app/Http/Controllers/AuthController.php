@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -15,7 +14,9 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
-
+    //@des login user
+    //@route POST /api/auth/login
+    //@access public
     public function login()
     {
         $credentials = request(['email', 'password']);
@@ -27,7 +28,9 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-
+    //@des register user
+    //@route POST /api/auth/register
+    //@access public
     public function register(Request $req){
         $user=new User;
         $user->name=$req->name;
@@ -47,12 +50,17 @@ class AuthController extends Controller
         }
     }
 
+    //@des user profile
+    //@route GET /api/auth/me
+    //@access private
     public function me()
     {
         return response()->json(auth()->user());
     }
 
-
+    //@des user logout
+    //@route GET /api/auth/logout
+    //@access private
     public function logout()
     {
         auth()->logout();
@@ -60,11 +68,17 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+
+    //@des refresh token
+    //@route GET /api/auth/refresh
+    //@access private
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
     }
 
+
+    //generate JWT token
     protected function respondWithToken($token)
     {
         return response()->json([
