@@ -72,13 +72,15 @@ class PostController extends Controller
 
         $post =Post::find($id);
 
+        if(!$post){
+            return response()->json(['message'=>'Post not found!'],404);
+        }
+
         if($user['id']!=$post['u_id']){
             return response()->json(['message'=>'Unauthorized!'],401);
         }
 
-        if(!$post){
-            return response()->json(['message'=>'Post not found!'],404);
-        }
+
 
         $post->title=is_null($req->title) ? $post -> title: $req->title;
         $post->description=is_null($req->description) ? $post->description:$req->description;
